@@ -8,14 +8,16 @@ import java.util.ArrayList;
 
 
 public class Server {
+    private static Socket socket;
     public static List <Users> clientList = new ArrayList<>();
     public static void main( String[] args ) {
       try ( ServerSocket server = new ServerSocket(80)){
            while (true){
                 try{
-                    Socket socket = server.accept();
+                    socket = server.accept();
                     clientList.add(new Users(socket));
         		} catch (IOException e){
+                    socket.close();
         			e.printStackTrace();
         		}
             }

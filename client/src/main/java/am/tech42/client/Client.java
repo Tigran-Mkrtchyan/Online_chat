@@ -11,6 +11,7 @@ import java.io.IOException;
 
 
 public class Client{
+    private static volatile boolean isGetOut = false;
 
     public static void main (String [] args){
         try(Socket socket = new Socket("127.0.0.1",80);
@@ -28,6 +29,7 @@ public class Client{
                                 out.flush();
                                 if(message.equals("exit")){
                                     out.write(message +"\n");
+                                    isGetOut = true;
                                     break;
                                 }
                             }catch ( IOException e){
@@ -36,6 +38,9 @@ public class Client{
                         }
                     }
                 }.start();
+                if(isGetOut){
+                    break;
+                }
                 System.out.println(in.readLine());
             }
 

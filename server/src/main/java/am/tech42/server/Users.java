@@ -9,9 +9,9 @@ import java.io.IOException;
 
 
 class Users extends Thread{
-	private Socket socket;
-	private BufferedReader in;
-	private BufferedWriter out;
+	private  Socket socket;
+	private  BufferedReader in;
+	private  BufferedWriter out;
 
 	public Users (Socket socket) throws IOException {
 		this.socket = socket;
@@ -28,9 +28,9 @@ class Users extends Thread{
 				try{
 					message = in.readLine();
 					if(message.equals("exit")){
-						stopAction();
-						break;
-					}
+                      Server.clientList.remove(this);
+                      break;
+                    }
 					for (Users user :Server.clientList){
 						if(user.equals(this)){
 							continue;
@@ -39,7 +39,8 @@ class Users extends Thread{
 						System.out.println("get: " + message);
 					}
 				} catch(IOException e){
-				e.printStackTrace();
+					stopAction();
+					e.printStackTrace();
 				}
 			}
 		}finally{
@@ -47,7 +48,7 @@ class Users extends Thread{
 		}
 	}
 
-	private void stopAction(){
+	private  void stopAction(){
 		try{
 			in.close();
 			out.close();
@@ -56,7 +57,7 @@ class Users extends Thread{
 			e.printStackTrace();
 		}
 	}
-	private void sendMessage(String message)throws IOException {
+	private  void sendMessage(String message)throws IOException {
 		out.write (message + "\n");
 		out.flush();
 	}
