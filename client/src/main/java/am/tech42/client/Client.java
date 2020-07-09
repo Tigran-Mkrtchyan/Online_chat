@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.net.UnknownHostException;
 import java.io.IOException;
 
 
@@ -20,18 +19,26 @@ public class Client{
             BufferedWriter out = new BufferedWriter ( new OutputStreamWriter( socket.getOutputStream()));
             ){
             while(true){
-                String message = reader.readLine();
-                out.write(message +"\n");
-                out.flush();
-                if(message.equals("exit")){
-                    out.write(message +"\n");
-                    break;
-                }
+                new Thread() {
+                    public void run () {
+                        while(true){
+                            try {
+                                String message = reader.readLine();
+                                out.write(message +"\n");
+                                out.flush();
+                                if(message.equals("exit")){
+                                    out.write(message +"\n");
+                                    break;
+                                }
+                            }catch ( IOException e){
+                                    e.printStackTrace();
+                            }
+                        }
+                    }
+                }.start();
                 System.out.println(in.readLine());
             }
 
-        } catch (UnknownHostException e){
-            e.printStackTrace();
         } catch ( IOException e){
             e.printStackTrace();
         }
